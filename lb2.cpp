@@ -14,7 +14,7 @@ void init() {
 	gluOrtho2D(-320, 320, -240, 240);
 }
 
-int ingresaDatos(int x1, int x2, int y1, int y2) {
+void ingresaDatos(int x1, int x2, int y1, int y2) {
 	printf("Ingresa los datos del tamanio de la pantalla!\n");
 	printf("Ingresa el valor de X min: ");
 	scanf_s("%d", &x1);
@@ -31,7 +31,6 @@ int ingresaDatos(int x1, int x2, int y1, int y2) {
 	printf("(%d, %d), (%d, %d)", x1, y2, x2, y1);
 	//getchar();
 
-	return x1, x2, y1, y2;
 }
 
 void clip(int x1, int y1, int x2, int y2)
