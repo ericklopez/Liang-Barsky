@@ -1,6 +1,6 @@
-#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include <GL/glut.h>
 
 int xmin = 0, xmax = 0, ymin = 0, ymax = 0; //limites de las ventanas
@@ -14,26 +14,41 @@ void init() {
 	gluOrtho2D(-320, 320, -240, 240);
 }
 
-void ingresaDatos(int x1, int x2, int y1, int y2) {
+void ingresaDatosPantalla() {
 	printf("Ingresa los datos del tamanio de la pantalla!\n");
 	printf("Ingresa el valor de X min: ");
-	scanf_s("%d", &x1);
+	scanf_s("%d", &xmin);
 	fflush(stdin);
 	printf("\nIngresa el valor de X max: ");
-	scanf_s("%d", &x2);
+	scanf_s("%d", &xmax);
 	fflush(stdin);
 	printf("\nIngresa el valor de Y min: ");
-	scanf_s("%d", &y2);
+	scanf_s("%d", &ymin);
 	fflush(stdin);
 	printf("\nIngresa el valor de Y max: ");
-	scanf_s("%d", &y1);
+	scanf_s("%d", &ymax);
 
-	printf("(%d, %d), (%d, %d)", x1, y2, x2, y1);
-	//getchar();
+	printf("(%d, %d), (%d, %d)", xmin, ymin, xmax, ymax);
 
 }
 
-void clip(int x1, int y1, int x2, int y2)
+void ingresaDatosLinea() {
+	printf("Ingresa los puntos inicial y final de la linea\n");
+	printf("Ingresa el valor de x1: ");
+	scanf_s("%d", &x1);
+	fflush(stdin);
+	printf("Ingresa el valor de y1: ");
+	scanf_s("%d", &y1);
+	fflush(stdin);
+	printf("Ingresa el valor de x2: ");
+	scanf_s("%d", &x2);
+	fflush(stdin);
+	printf("Ingresa el valor de y2: ");
+	scanf_s("%d", &y2);
+	fflush(stdin);
+}
+
+void recortar(int x1, int y1, int x2, int y2)
 {
 	int dx = x2 - x1, dy = y2 - y1, i;
 	double t;
@@ -48,7 +63,7 @@ void clip(int x1, int y1, int x2, int y2)
 			return;
 		if (p[i] < 0)
 		{
-			t = (q[i]) / (p[i]);  // This calculation was returning a zero because both q and p were int
+			t = (q[i]) / (p[i]); 
 			if (t > u1 && t < u2)
 			{
 				u1 = t;
@@ -56,7 +71,7 @@ void clip(int x1, int y1, int x2, int y2)
 		}
 		else if (p[i] > 0)
 		{
-			t = (q[i]) / (p[i]);  // This calculation was returning a zero because both q and p were int
+			t = (q[i]) / (p[i]);  
 			if (t > u1 && t < u2)
 			{
 				u2 = t;
@@ -82,12 +97,11 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_LINES);
-	glVertex2i(x1, y2);
+	glVertex2i(x1, y1);
 	glVertex2i(x2, y2);
 	glEnd();
 	glFlush();
 }
-
 void myKey(unsigned char key, int x, int y)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -97,17 +111,17 @@ void myKey(unsigned char key, int x, int y)
 		glFlush();
 		glColor3f(0.0, 0.0, 0.0);
 		glBegin(GL_LINES);
-		glVertex2i(x1, y1);
-		glVertex2i(x1, y2);
-		glVertex2i(x1, y2);
-		glVertex2i(x2, y2);
-		glVertex2i(x2, y2);
-		glVertex2i(x2, y1);
-		glVertex2i(x2, y2);
-		glVertex2i(x1, y2);
+		glVertex2i(xmin, ymin);
+		glVertex2i(xmin, ymax);
+		glVertex2i(xmin, ymax);
+		glVertex2i(xmax, ymax);
+		glVertex2i(xmax, ymax);
+		glVertex2i(xmax, ymin);
+		glVertex2i(xmax, ymin);
+		glVertex2i(xmin, ymin);
 		glEnd();
 		glFlush();
-		clip(::x1, y1, x2, y2);
+		recortar(::x1, y2, x2, y1);
 	}
 
 
@@ -118,8 +132,9 @@ int main(int argc, char ** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("Algoritmo Liang- Barsky 2019-1");
-	ingresaDatos(xmin, xmax, ymin, ymax);
+	glutCreateWindow("Algoritmo Liang-Basrky 2019-1");
+	ingresaDatosPantalla();
+	ingresaDatosLinea();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(myKey);
 	init();
